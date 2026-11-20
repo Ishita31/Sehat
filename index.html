@@ -735,7 +735,49 @@
    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>  const SUPABASE_URL = "https://jasuwfsjyqtotntcecvp.supabase.co";   const SUPABASE_KEY = "sb_publishable_8iTx7ex96WUIi3NgpN_5tA_89Zu7Bgu";    const db = window.supabase.createClient(     SUPABASE_URL,     SUPABASE_KEY   );    let currentLanguage = "en";   let hospitals = [];   let doctors = [];    const hospitalSelect = document.getElementById("hospitalSelect");   const doctorGrid = document.getElementById("doctorGrid");   const hospitalHeading = document.getElementById("hospitalHeading");    async function loadHospitals() {     hospitalSelect.innerHTML = '<option value="">Loading...</option>';      const { data, error } = await db.rpc("get_public_hospitals");      if (error) {       hospitalSelect.innerHTML = '<option value="">Unable to load hospitals</option>';       console.error("Hospital error:", error);       return;     }      hospitals = data || [];      hospitalSelect.innerHTML = "";      hospitals.forEach(hospital => {       const option = document.createElement("option");       option.value = hospital.id;       option.textContent = hospital.name;       hospitalSelect.appendChild(option);     });      if (hospitals.length > 0) {       await loadDoctors();     }   }    async function loadDoctors() {     const hospitalId = hospitalSelect.value;      if (!hospitalId) return;      doctorGrid.innerHTML = "<p>Loading doctors...</p>";      const selectedHospital = hospitals.find(h => h.id === hospitalId);      hospitalHeading.textContent = currentLanguage === "en"       ? "Doctors at " + selectedHospital.name       : selectedHospital.name + " के डॉक्टर";      const { data, error } = await db.rpc(       "get_public_doctors",       { p_hospital_id: hospitalId }     );      if (error) {       doctorGrid.textContent = currentLanguage === "en"         ? "Unable to load doctors. Please try again."         : "डॉक्टरों की जानकारी लोड नहीं हो सकी। कृपया फिर कोशिश करें।";        console.error("Doctor error:", error);       return;     }      doctors = data || [];     renderDoctors();   }    function renderDoctors() {     doctorGrid.innerHTML = "";      if (doctors.length === 0) {       doctorGrid.textContent = currentLanguage === "en"         ? "No doctors are currently listed at this hospital."         : "इस अस्पताल में अभी कोई डॉक्टर सूचीबद्ध नहीं है।";       return;     }      doctors.forEach(doctor => {       const initials = doctor.name         .split(" ")         .filter(Boolean)         .slice(-2)         .map(word => word[0])         .join("")         .toUpperCase();        const card = document.createElement("article");       card.className = "doctor-card";        const top = document.createElement("div");       top.className = "doctor-top";        const avatar = document.createElement("div");       avatar.className = "doctor-avatar";       avatar.textContent = initials;        const details = document.createElement("div");        const name = document.createElement("h3");       name.textContent = doctor.name;        const qualification = document.createElement("div");       qualification.className = "qualification";       qualification.textContent = doctor.qualification || "";        details.append(name, qualification);       top.append(avatar, details);        const availability = document.createElement("div");       availability.className = "availability";        const status = document.createElement("strong");       status.textContent = currentLanguage === "en"         ? "Availability not published yet"         : "उपलब्धता अभी प्रकाशित नहीं हुई है";        const note = document.createElement("span");       note.textContent = currentLanguage === "en"         ? "Please check again later for updated timings."         : "अपडेट किए गए समय के लिए बाद में जांचें।";        availability.append(status, note);        const button = document.createElement("button");       button.className = "btn btn-primary";       button.disabled = true;       button.textContent = currentLanguage === "en"         ? "Booking not available yet"         : "बुकिंग अभी उपलब्ध नहीं";        card.append(top, availability, button);       doctorGrid.appendChild(card);     });   }    hospitalSelect.addEventListener("change", loadDoctors);    function goToDoctors() {     loadDoctors();     document.getElementById("doctors").scrollIntoView({       behavior: "smooth"     });   }    document.getElementById("languageBtn").addEventListener("click", function() {     currentLanguage = currentLanguage === "en" ? "hi" : "en";     document.documentElement.lang = currentLanguage;      document.querySelectorAll("[data-en]").forEach(element => {       element.innerHTML = element.getAttribute("data-" + currentLanguage);     });      this.textContent = currentLanguage === "en" ? "हिन्दी" : "English";      renderDoctors();      const selectedHospital = hospitals.find(       h => h.id === hospitalSelect.value     );      if (selectedHospital) {       hospitalHeading.textContent = currentLanguage === "en"         ? "Doctors at " + selectedHospital.name         : selectedHospital.name + " के डॉक्टर";     }   });    document.getElementById("trackingForm").addEventListener("submit", function(event) {     event.preventDefault();      const message = document.getElementById("trackingMessage");     message.style.display = "block";     message.textContent = currentLanguage === "en"       ? "Appointment tracking will be connected in the next step."       : "अपॉइंटमेंट ट्रैकिंग अगले चरण में जोड़ी जाएगी।";   });    function closeModal() {     document.getElementById("appointmentModal").classList.remove("show");   }    document.getElementById("appointmentForm").addEventListener("submit", function(event) {     event.preventDefault();      const message = document.getElementById("appointmentMessage");     message.style.display = "block";     message.textContent = currentLanguage === "en"       ? "Appointment booking will be connected in the next step. Your details have not been submitted."       : "बुकिंग अगले चरण में जोड़ी जाएगी। आपकी जानकारी अभी जमा नहीं हुई है।";   });    document.getElementById("appointmentModal").addEventListener("click", function(event) {     if (event.target === this) closeModal();   });    document.getElementById("preferredDate").min =     new Date().toISOString().split("T")[0];    loadHospitals(); 
-   </script>
+ 
+document.getElementById("staffLoginForm").addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const message = document.getElementById("staffLoginMessage");
+  const email = document.getElementById("staffEmail").value.trim();
+  const password = document.getElementById("staffPassword").value;
+
+  message.style.display = "block";
+  message.textContent = "Checking login...";
+
+  const { data, error } = await db.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    message.textContent = "Login failed. Please check your email and password.";
+    console.error("Login error:", error);
+    return;
+  }
+
+  const { data: staffRows, error: staffError } = await db
+  .rpc("get_my_staff_profile");
+
+const staff = staffRows && staffRows.length > 0
+  ? staffRows[0]
+  : null;
+
+  if (staffError || !staff || !staff.is_active) {
+    await db.auth.signOut();
+    message.textContent = "Login succeeded, but an active Sehat staff profile could not be verified.";
+    console.error("Staff verification error:", staffError);
+    return;
+  }
+
+  message.textContent =
+    "Welcome, " + staff.full_name + "! Login successful. Role: " + staff.role;
+
+  document.getElementById("staffPassword").value = "";
+});
+  
+</script>
 
 
     
