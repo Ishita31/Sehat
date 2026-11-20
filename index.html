@@ -858,6 +858,78 @@ const staff = staffRows && staffRows.length > 0
   document.getElementById("staffPassword").value = "";
 });
   
+
+  // Show or hide consultation time fields based on availability status
+  const availabilityStatus = document.getElementById("availabilityStatus");
+  const consultationTimes = document.getElementById("consultationTimes");
+  const consultationStart = document.getElementById("consultationStart");
+  const consultationEnd = document.getElementById("consultationEnd");
+
+  availabilityStatus.addEventListener("change", function () {
+    const isAvailable = this.value === "available";
+    consultationTimes.style.display = isAvailable ? "block" : "none";
+    consultationStart.required = isAvailable;
+    consultationEnd.required = isAvailable;
+  });
+
+  // Save doctor's availability in Supabase
+  document.getElementById("availabilityForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const message = document.getElementById("availabilityMessage");
+    const hospitalId = document.getElementById("availabilityHospital").value;
+    const availableDate = document.getElementById("availabilityDate").value;
+    const status = availabilityStatus.value;
+
+    const assignments = window.sehatDoctorAssignments || [];
+    const assignment = assignments.find(
+      item => item.hospital_id === hospitalId
+    );
+
+    message.style.display = "block";
+
+    if (!assignment) {
+      message.textContent = "Hospital assignment not found. Please log in again.";
+      return;
+    }
+
+    let startTime = null;
+    let endTime = null;
+
+    if (status === "available") {
+      startTime = consultationStart.value;
+      endTime = consultationEnd.value;
+
+      if (!startTime || !endTime || endTime <= startTime) {
+        message.textContent = "Please enter valid consultation start and end times.";
+        return;
+      }
+    }
+
+    message.textContent = "Saving availability...";
+
+    const { data, error } = await db.rpc("set_doctor_availability", {
+      p_hospital_id: hospitalId,
+      p_doctor_id: assignment.doctor_id,
+      p_available_date: availableDate,
+      p_status: status,
+      p_start_time: startTime,
+      p_end_time: endTime,
+      p_next_available_date: null,
+      p_next_available_time: null,
+      p_reason: null
+    });
+
+    if (error) {
+      message.textContent = "Unable to save availability. Please try again.";
+      console.error("Availability save error:", error);
+      return;
+    }
+
+    message.textContent = "Availability saved successfully!";
+    console.log("Availability result:", data);
+  });
+
 </script>
 
 
