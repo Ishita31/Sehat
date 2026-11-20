@@ -833,7 +833,13 @@ async function loadDoctors() {
     publicAvailability = availabilityData || [];
   }
 
+    console.log("Selected hospital:", hospitalId);
+  console.log("Selected date:", selectedDate);
+  console.log("Doctors received:", doctors);
+  console.log("Availability received:", publicAvailability);
+
   renderDoctors();
+}
 }
    
 function renderDoctors() {
