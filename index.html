@@ -640,7 +640,54 @@
       </div>
     </section>
     
-<section class="section" id="staffLogin">
+   
+
+
+<section class="section" id="doctorAvailability" style="display:none;">
+  <div class="container" style="max-width:600px;">
+    <div class="section-heading">
+      <div class="eyebrow">DOCTOR WORKSPACE</div>
+      <h2>Manage Your Availability</h2>
+      <p>Publish your consultation schedule for patients.</p>
+    </div>
+
+    <div class="doctor-card">
+      <form id="availabilityForm">
+        <label for="availabilityHospital">Select hospital</label>
+        <select id="availabilityHospital" required>
+          <option value="">Loading hospitals...</option>
+        </select>
+
+        <label for="availabilityDate" style="display:block;margin-top:14px;">Date</label>
+        <input type="date" id="availabilityDate" required>
+
+        <label for="availabilityStatus" style="display:block;margin-top:14px;">Status</label>
+        <select id="availabilityStatus" required>
+          <option value="available">Available</option>
+          <option value="unavailable">Unavailable</option>
+        </select>
+
+        <div id="consultationTimes">
+          <label for="consultationStart" style="display:block;margin-top:14px;">Start time</label>
+          <input type="time" id="consultationStart">
+
+          <label for="consultationEnd" style="display:block;margin-top:14px;">End time</label>
+          <input type="time" id="consultationEnd">
+        </div>
+
+        <button class="btn btn-primary" type="submit" style="width:100%;margin-top:20px;">
+          Save Availability
+        </button>
+
+        <div class="form-message" id="availabilityMessage"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+    <section class="section" id="staffLogin">
+   
   <div class="container" style="max-width:480px;">
     <div class="section-heading">
       <div class="eyebrow">STAFF & ADMIN</div>
