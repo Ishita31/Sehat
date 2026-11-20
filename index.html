@@ -821,6 +821,40 @@ const staff = staffRows && staffRows.length > 0
   message.textContent =
     "Welcome, " + staff.full_name + "! Login successful. Role: " + staff.role;
 
+  // Show the doctor workspace only for doctor accounts
+  if (staff.role === "doctor") {
+    const workspace = document.getElementById("doctorAvailability");
+    const hospitalDropdown = document.getElementById("availabilityHospital");
+
+    message.textContent = "Loading your doctor workspace...";
+
+    const { data: assignments, error: assignmentError } =
+      await db.rpc("get_my_doctor_assignments");
+
+    if (assignmentError || !assignments || assignments.length === 0) {
+      message.textContent =
+        "Login successful, but no hospital assignments were found.";
+      console.error("Doctor assignment error:", assignmentError);
+    } else {
+      window.sehatDoctorAssignments = assignments;
+
+      hospitalDropdown.innerHTML = "";
+
+      assignments.forEach(assignment => {
+        const option = document.createElement("option");
+        option.value = assignment.hospital_id;
+        option.textContent = assignment.hospital_name;
+        hospitalDropdown.appendChild(option);
+      });
+
+      workspace.style.display = "block";
+      message.textContent =
+        "Welcome, " + staff.full_name + "! Your doctor workspace is ready.";
+
+      workspace.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
   document.getElementById("staffPassword").value = "";
 });
   
