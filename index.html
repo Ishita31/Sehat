@@ -594,8 +594,8 @@
 
 /* Compact doctor availability layout */
 .compact-search {
-  padding: 16px 0 24px;
-  min-height: calc(100vh - 65px);
+  padding: 16px 0 12px;
+  min-height: 0;
 }
 
 .search-heading {
@@ -937,11 +937,16 @@
 </section>
 
 
-    <section class="section" id="staffLogin">
+<section class="section" id="staffLogin" style="display:none;">
    
   <div class="container" style="max-width:480px;">
     <div class="section-heading">
       <div class="eyebrow">STAFF & ADMIN</div>
+      <div style="text-align:left; margin-bottom:25px;">
+  <a href="#" id="backToHome" style="color:var(--burgundy); text-decoration:none; font-weight:600;">
+    ← Back to Home
+  </a>
+</div>
       <h2>Staff Login</h2>
       <p>Secure access for Sehat hospital staff and administrators.</p>
     </div>
@@ -1192,7 +1197,37 @@ publicDateInput.value = localToday.toISOString().split("T")[0];
 hospitalSelect.addEventListener("change", loadDoctors);
 publicDateInput.addEventListener("change", loadDoctors);   function goToDoctors() {     loadDoctors();     document.getElementById("doctors").scrollIntoView({       behavior: "smooth"     });   }    document.getElementById("languageBtn").addEventListener("click", function() {     currentLanguage = currentLanguage === "en" ? "hi" : "en";     document.documentElement.lang = currentLanguage;      document.querySelectorAll("[data-en]").forEach(element => {       element.innerHTML = element.getAttribute("data-" + currentLanguage);     });      this.textContent = currentLanguage === "en" ? "हिन्दी" : "English";      renderDoctors();      const selectedHospital = hospitals.find(       h => h.id === hospitalSelect.value     );      if (selectedHospital) {       hospitalHeading.textContent = currentLanguage === "en"         ? "Doctors at " + selectedHospital.name         : selectedHospital.name + " के डॉक्टर";     }   });    document.getElementById("trackingForm").addEventListener("submit", function(event) {     event.preventDefault();      const message = document.getElementById("trackingMessage");     message.style.display = "block";     message.textContent = currentLanguage === "en"       ? "Appointment tracking will be connected in the next step."       : "अपॉइंटमेंट ट्रैकिंग अगले चरण में जोड़ी जाएगी।";   });    function closeModal() {     document.getElementById("appointmentModal").classList.remove("show");   }    document.getElementById("appointmentForm").addEventListener("submit", function(event) {     event.preventDefault();      const message = document.getElementById("appointmentMessage");     message.style.display = "block";     message.textContent = currentLanguage === "en"       ? "Appointment booking will be connected in the next step. Your details have not been submitted."       : "बुकिंग अगले चरण में जोड़ी जाएगी। आपकी जानकारी अभी जमा नहीं हुई है।";   });    document.getElementById("appointmentModal").addEventListener("click", function(event) {     if (event.target === this) closeModal();   });    document.getElementById("preferredDate").min =     new Date().toISOString().split("T")[0];    loadHospitals(); 
  
-document.getElementById("staffLoginForm").addEventListener("submit", async function(event) {
+// Switch between homepage and staff login screen
+const staffLoginSection = document.getElementById("staffLogin");
+const backToHomeLink = document.getElementById("backToHome");
+
+document.querySelector('a[href="#staffLogin"]').addEventListener("click", function(event) {
+  event.preventDefault();
+
+  document.querySelectorAll("main > section").forEach(section => {
+    section.style.display = "none";
+  });
+
+  staffLoginSection.style.display = "block";
+  window.scrollTo(0, 0);
+});
+
+backToHomeLink.addEventListener("click", function(event) {
+  event.preventDefault();
+
+  staffLoginSection.style.display = "none";
+
+  document.querySelectorAll("main > section").forEach(section => {
+    if (section.id === "doctorAvailability" || section.id === "staffLogin") {
+      section.style.display = "none";
+    } else {
+      section.style.display = "";
+    }
+  });
+
+  window.scrollTo(0, 0);
+});
+  document.getElementById("staffLoginForm").addEventListener("submit", async function(event) {
   event.preventDefault();
 
   const message = document.getElementById("staffLoginMessage");
@@ -1255,7 +1290,11 @@ const staff = staffRows && staffRows.length > 0
         option.textContent = assignment.hospital_name;
         hospitalDropdown.appendChild(option);
       });
+document.querySelectorAll("main > section").forEach(section => {
+  section.style.display = "none";
+});
 
+staffLoginSection.style.display = "none";
       workspace.style.display = "block";
       message.textContent =
         "Welcome, " + staff.full_name + "! Your doctor workspace is ready.";
