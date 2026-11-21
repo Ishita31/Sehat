@@ -543,88 +543,332 @@
       .brand-mark { width: 31px; height: 31px; }
       .nav-actions .btn { padding: 9px; }
     }
+    
+/* Compact Sehat header */
+.nav {
+  min-height: 65px;
+  gap: 18px;
+}
+
+.brand {
+  font-size: 27px;
+}
+
+.brand-mark {
+  display: none;
+}
+
+.brand small {
+  margin-top: -3px;
+  letter-spacing: 1px;
+}
+
+.header-slogan {
+  color: var(--burgundy);
+  font-family: Georgia, serif;
+  font-size: 25px;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.nav-actions {
+  gap: 9px;
+}
+
+.nav-actions .btn {
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .header-slogan {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .nav {
+    min-height: 60px;
+  }
+}
+
+/* Compact doctor availability layout */
+.compact-search {
+  padding: 16px 0 24px;
+  min-height: calc(100vh - 65px);
+}
+
+.search-heading {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.search-heading h2 {
+  font-family: Georgia, serif;
+  font-size: 27px;
+  font-weight: 500;
+  margin: 2px 0;
+}
+
+.search-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  max-width: 650px;
+  margin: 0 auto 12px;
+}
+
+.search-controls label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.search-controls select,
+.search-controls input {
+  padding: 10px 12px;
+  height: 43px;
+}
+
+.availability-summary {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 650;
+  margin: 8px 0 14px;
+  color: var(--charcoal);
+}
+
+.doctor-grid {
+  gap: 14px;
+}
+
+.doctor-card {
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.doctor-top {
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.doctor-avatar {
+  flex-basis: 48px;
+  height: 48px;
+  font-size: 19px;
+}
+
+.doctor-card h3 {
+  font-size: 16px;
+}
+
+.availability {
+  padding: 10px 12px;
+  margin: 10px 0;
+}
+
+.availability strong {
+  font-size: 13px;
+}
+
+.availability.is-available {
+  background: #EAF4EA;
+}
+
+.availability.is-available strong,
+.availability.is-available span {
+  color: #287A3D;
+}
+
+.availability.is-unavailable strong {
+  color: var(--burgundy);
+}
+
+.doctor-card .btn {
+  padding: 10px 14px;
+  margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+  .compact-search {
+    padding-top: 14px;
+  }
+
+  .search-controls {
+    gap: 8px;
+  }
+
+  .search-controls select,
+  .search-controls input {
+    font-size: 13px;
+    padding: 9px;
+  }
+
+  .doctor-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* Compact doctor availability layout */
+.compact-search {
+  padding: 16px 0 24px;
+  min-height: calc(100vh - 65px);
+}
+
+.search-heading {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.search-heading h2 {
+  font-family: Georgia, serif;
+  font-size: 25px;
+  font-weight: 500;
+  margin: 2px 0;
+}
+
+.search-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  max-width: 650px;
+  margin: 0 auto 12px;
+}
+
+.search-controls label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.search-controls select,
+.search-controls input {
+  padding: 10px 12px;
+  height: 43px;
+}
+
+.availability-summary {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 650;
+  margin: 8px 0 14px;
+  color: var(--charcoal);
+}
+
+.doctor-grid {
+  gap: 14px;
+}
+
+.doctor-card {
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.availability.is-available {
+  background: #EAF4EA;
+}
+
+.availability.is-available strong,
+.availability.is-available span {
+  color: #287A3D;
+}
+
+.availability.is-unavailable strong {
+  color: var(--burgundy);
+}
+
+@media (max-width: 600px) {
+  .compact-search {
+    padding-top: 14px;
+  }
+
+  .search-controls {
+    gap: 8px;
+  }
+
+  .search-controls select,
+  .search-controls input {
+    font-size: 13px;
+    padding: 9px;
+  }
+
+  .doctor-grid {
+    grid-template-columns: 1fr;
+  }
+}
   </style>
 </head>
 
 <body>
 
-  <header class="topbar">
-    <div class="container nav">
-      <a class="brand" href="#">
-        <span class="brand-mark">+</span>
-        <span>
-          sehat.
-          <small>HEALTHCARE, MADE SIMPLE</small>
-        </span>
-      </a>
+  
+<header class="topbar">
+  <div class="container nav">
+    <a class="brand" href="#">
+      <span>
+        sehat.
+        <small>HEALTHCARE, MADE SIMPLE</small>
+      </span>
+    </a>
 
-      <div class="nav-actions">
-        <button class="language" id="languageBtn" type="button">हिन्दी</button>
-        <a href="#tracking" class="btn btn-primary" data-en="Track Appointment" data-hi="अपॉइंटमेंट ट्रैक करें">Track Appointment</a>
-        <a href="#staffLogin" class="btn btn-outline">Staff Login</a>
-      </div>
+    <div class="header-slogan">
+      The right doctor. The right time.
     </div>
-  </header>
+
+    <div class="nav-actions">
+      <a href="#tracking" class="btn btn-primary">
+        Track Appointment
+      </a>
+      <a href="#staffLogin" class="btn btn-outline">
+        Staff Login
+      </a>
+      <button class="language" id="languageBtn" type="button">
+        हिन्दी
+      </button>
+    </div>
+  </div>
+</header>
 
   <main>
-    <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          <div class="eyebrow" data-en="A simpler way to healthcare" data-hi="स्वास्थ्य सेवा अब आसान">A simpler way to healthcare</div>
+    
+<section class="section compact-search" id="doctors">
+  <div class="container">
 
-          <h1 data-en="The right doctor. <span>The right time.</span>" data-hi="सही डॉक्टर। <span>सही समय।</span>">
-            The right doctor. <span>The right time.</span>
-          </h1>
+    <div class="search-heading">
+      <div class="eyebrow">SEHAT · DOCTOR AVAILABILITY</div>
+      <h2>Find the right doctor</h2>
+    </div>
 
-          <p class="hero-copy" data-en="Check doctor availability before you travel. Find your hospital, explore doctors and make informed appointment requests." data-hi="अस्पताल जाने से पहले डॉक्टर की उपलब्धता जांचें। अपना अस्पताल चुनें और अपॉइंटमेंट का अनुरोध करें।">
-            Check doctor availability before you travel. Find your hospital, explore doctors and make informed appointment requests.
-          </p>
-
-          <div class="hospital-picker">
-            <label for="hospitalSelect" data-en="SELECT YOUR HOSPITAL" data-hi="अपना अस्पताल चुनें">SELECT YOUR HOSPITAL</label>
-            <select id="hospitalSelect">
-  <option value="">Loading hospitals...</option>
-</select>
-            <button class="btn btn-primary" type="button" onclick="goToDoctors()" data-en="Check Availability →" data-hi="उपलब्धता देखें →">Check Availability →</button>
-          </div>
-
-          <div class="trust-row">
-            <span data-en="No patient registration" data-hi="मरीज का रजिस्ट्रेशन जरूरी नहीं">No patient registration</span>
-            <span data-en="Simple appointment requests" data-hi="आसान अपॉइंटमेंट अनुरोध">Simple appointment requests</span>
-          </div>
-        </div>
-
-        <div class="hero-art" aria-label="Healthcare illustration">
-          <div class="medical-symbol">✚</div>
-          <div class="art-note" data-en="Your healthcare journey, made simpler." data-hi="आपकी स्वास्थ्य यात्रा अब आसान।">
-            Your healthcare journey, made simpler.
-          </div>
-        </div>
+    <div class="search-controls">
+      <div>
+        <label for="hospitalSelect">SELECT HOSPITAL</label>
+        <select id="hospitalSelect">
+          <option value="">Loading hospitals...</option>
+        </select>
       </div>
-    </section>
 
-    <section class="section" id="doctors">
-      <div class="container">
-        <div class="section-heading">
-          <div class="eyebrow" data-en="Meet our doctors" data-hi="हमारे डॉक्टर">Meet our doctors</div>
-          <h2 data-en="Find the care you need" data-hi="अपनी जरूरत के अनुसार डॉक्टर चुनें">Find the care you need</h2>
-          <p id="hospitalHeading">Doctors at Sankalp Hospital</p>
-        </div>
-
-       <div style="max-width:320px;margin:0 auto 25px;">
-  <label for="publicAvailabilityDate" style="display:block;margin-bottom:8px;font-weight:650;">
-    Check availability for date
-  </label>
-  <input type="date" id="publicAvailabilityDate">
-</div>
-
-<div class="doctor-grid" id="doctorGrid">
-  <p>Loading doctors...</p>
-</div>
-
-            
+      <div>
+        <label for="publicAvailabilityDate">SELECT DATE</label>
+        <input type="date" id="publicAvailabilityDate">
       </div>
-    </section>
+    </div>
+
+    <div class="availability-summary" id="availabilitySummary">
+      Select a hospital and date to check availability.
+    </div>
+
+    <div class="doctor-grid" id="doctorGrid">
+      <p>Loading doctors...</p>
+    </div>
+
+  </div>
+</section>
+
+
+    <p id="hospitalHeading" hidden></p>
 
     <section class="tracking-section" id="tracking">
       <div class="container tracking-box">
@@ -845,6 +1089,18 @@ async function loadDoctors() {
 function renderDoctors() {
   doctorGrid.innerHTML = "";
 
+  const availableCount = doctors.filter(doctor =>
+    publicAvailability.some(item =>
+      item.doctor_id === doctor.id &&
+      item.availability_status === "available"
+    )
+  ).length;
+
+  const summary = document.getElementById("availabilitySummary");
+  if (summary) {
+    summary.textContent = `${availableCount} of ${doctors.length} doctors available on the selected date`;
+  }
+
   if (doctors.length === 0) {
     doctorGrid.textContent = "No doctors are currently listed at this hospital.";
     return;
@@ -891,6 +1147,7 @@ function renderDoctors() {
     const note = document.createElement("span");
 
     if (schedule && schedule.availability_status === "available") {
+      availability.classList.add("is-available");
       status.textContent = "Available";
 
       const start = schedule.consultation_start
@@ -902,6 +1159,7 @@ function renderDoctors() {
 
       note.textContent = "Consultation: " + start + " – " + end;
     } else if (schedule && schedule.availability_status === "unavailable") {
+      availability.classList.add("is-unavailable");
       status.textContent = "Not available";
       note.textContent = "The doctor is not available on this date.";
     } else if (schedule && schedule.availability_status === "fully_booked") {
