@@ -1,0 +1,13 @@
+{
+  "name": "sehat",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build && wrangler pages dev",
+    "build": "node scripts/build.js",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
