@@ -1527,7 +1527,70 @@ backToHomeLink.addEventListener("click", function(event) {
   document.getElementById("staffPassword").value = "";
 });
 
- 
+   // Save Hospital Profile
+  document.getElementById("hospitalProfileForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const message = document.getElementById("hospitalProfileMessage");
+    message.textContent = "Saving hospital profile...";
+
+    const latitudeValue = document.getElementById("profileLatitude").value.trim();
+    const longitudeValue = document.getElementById("profileLongitude").value.trim();
+
+    if ((latitudeValue === "") !== (longitudeValue === "")) {
+      message.textContent = "Please enter both latitude and longitude, or leave both blank.";
+      return;
+    }
+
+    const { data, error } = await db.rpc("update_my_hospital_profile", {
+      p_name: document.getElementById("profileHospitalName").value.trim(),
+      p_address: document.getElementById("profileHospitalAddress").value.trim(),
+      p_district: document.getElementById("profileHospitalDistrict").value.trim(),
+      p_state: document.getElementById("profileHospitalState").value.trim(),
+      p_phone: document.getElementById("profileHospitalPhone").value.trim(),
+      p_latitude: latitudeValue === "" ? null : Number(latitudeValue),
+      p_longitude: longitudeValue === "" ? null : Number(longitudeValue),
+      p_attendance_radius_m: Number(
+        document.getElementById("profileAttendanceRadius").value
+      )
+    });
+
+    if (error) {
+      message.textContent = "Unable to save hospital profile: " + error.message;
+      console.error("Hospital profile save error:", error);
+      return;
+    }
+
+    message.textContent = "Hospital profile saved successfully!";
+
+    // Refresh the displayed hospital details
+    if (data) {
+      document.getElementById("adminHospitalName").textContent =
+        data.hospital_name;
+
+      const addressParts = [
+        data.address,
+        data.district,
+        data.state
+      ].filter(Boolean);
+
+      document.getElementById("adminHospitalAddress").textContent =
+        addressParts.join(", ") || "Hospital address not added";
+
+      document.getElementById("adminHospitalLocation").textContent =
+        data.latitude != null && data.longitude != null
+          ? "GPS coordinates: " + data.latitude + ", " + data.longitude
+          : "GPS coordinates not configured yet.";
+
+      document.getElementById("adminGpsStatus").textContent =
+        data.latitude != null && data.longitude != null
+          ? "Attendance location is configured."
+          : "Attendance location needs to be configured.";
+
+      document.getElementById("adminAttendanceRadius").textContent =
+        "Attendance radius: " + data.attendance_radius_m + " metres";
+    }
+  });
 
   // Show or hide consultation time fields based on availability status
   const availabilityStatus = document.getElementById("availabilityStatus");
