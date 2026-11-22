@@ -836,25 +836,25 @@
   <div class="container">
 
     <div class="search-heading">
-      <div class="eyebrow">SEHAT · DOCTOR AVAILABILITY</div>
-      <h2>Find the right doctor</h2>
+     <div class="eyebrow" data-en="SEHAT · DOCTOR AVAILABILITY" data-hi="सेहत · डॉक्टर की उपलब्धता">SEHAT · DOCTOR AVAILABILITY</div>
+      <h2 data-en="Find the right doctor" data-hi="सही डॉक्टर खोजें">Find the right doctor</h2>
     </div>
 
     <div class="search-controls">
       <div>
-        <label for="hospitalSelect">SELECT HOSPITAL</label>
+        <label for="hospitalSelect" data-en="SELECT HOSPITAL" data-hi="अस्पताल चुनें">SELECT HOSPITAL</label>
         <select id="hospitalSelect">
           <option value="">Loading hospitals...</option>
         </select>
       </div>
 
       <div>
-        <label for="publicAvailabilityDate">SELECT DATE</label>
+        <label for="publicAvailabilityDate" data-en="SELECT DATE" data-hi="तारीख चुनें">SELECT DATE</label>
         <input type="date" id="publicAvailabilityDate">
       </div>
     </div>
 
-    <div class="availability-summary" id="availabilitySummary">
+    <div class="availability-summary" id="availabilitySummary" data-en="Select a hospital and date to check availability." data-hi="उपलब्धता देखने के लिए अस्पताल और तारीख चुनें।">
       Select a hospital and date to check availability.
     </div>
 
@@ -1105,12 +1105,19 @@ function renderDoctors() {
   ).length;
 
   const summary = document.getElementById("availabilitySummary");
-  if (summary) {
+
+if (summary) {
+  if (currentLanguage === "hi") {
+    summary.textContent = `चुनी गई तारीख पर ${doctors.length} में से ${availableCount} डॉक्टर उपलब्ध हैं`;
+  } else {
     summary.textContent = `${availableCount} of ${doctors.length} doctors available on the selected date`;
   }
+}
 
   if (doctors.length === 0) {
-    doctorGrid.textContent = "No doctors are currently listed at this hospital.";
+    doctorGrid.textContent = currentLanguage === "hi"
+  ? "इस अस्पताल में अभी कोई डॉक्टर सूचीबद्ध नहीं हैं।"
+  : "No doctors are currently listed at this hospital.";
     return;
   }
 
@@ -1155,36 +1162,50 @@ function renderDoctors() {
     const note = document.createElement("span");
 
     if (schedule && schedule.availability_status === "available") {
-      availability.classList.add("is-available");
-      status.textContent = "Available";
+  availability.classList.add("is-available");
+  status.textContent = currentLanguage === "hi" ? "उपलब्ध" : "Available";
 
-      const start = schedule.consultation_start
-        ? schedule.consultation_start.substring(0, 5)
-        : "";
-      const end = schedule.consultation_end
-        ? schedule.consultation_end.substring(0, 5)
-        : "";
+  const start = schedule.consultation_start
+    ? schedule.consultation_start.substring(0, 5)
+    : "";
+  const end = schedule.consultation_end
+    ? schedule.consultation_end.substring(0, 5)
+    : "";
 
-      note.textContent = "Consultation: " + start + " – " + end;
-    } else if (schedule && schedule.availability_status === "unavailable") {
-      availability.classList.add("is-unavailable");
-      status.textContent = "Not available";
-      note.textContent = "The doctor is not available on this date.";
-    } else if (schedule && schedule.availability_status === "fully_booked") {
-      status.textContent = "Fully booked";
-      note.textContent = "No consultation slots are currently available.";
-    } else {
-      status.textContent = "Availability not published yet";
-      note.textContent = "Please check another date.";
-    }
+  note.textContent = currentLanguage === "hi"
+    ? "परामर्श का समय: " + start + " – " + end
+    : "Consultation: " + start + " – " + end;
+
+} else if (schedule && schedule.availability_status === "unavailable") {
+  availability.classList.add("is-unavailable");
+  status.textContent = currentLanguage === "hi" ? "उपलब्ध नहीं" : "Not available";
+  note.textContent = currentLanguage === "hi"
+    ? "डॉक्टर इस तारीख को उपलब्ध नहीं हैं।"
+    : "The doctor is not available on this date.";
+
+} else if (schedule && schedule.availability_status === "fully_booked") {
+  status.textContent = currentLanguage === "hi" ? "सभी स्लॉट बुक हैं" : "Fully booked";
+  note.textContent = currentLanguage === "hi"
+    ? "फिलहाल परामर्श के लिए कोई स्लॉट उपलब्ध नहीं है।"
+    : "No consultation slots are currently available.";
+
+} else {
+  status.textContent = currentLanguage === "hi"
+    ? "उपलब्धता अभी घोषित नहीं हुई"
+    : "Availability not published yet";
+  note.textContent = currentLanguage === "hi"
+    ? "कृपया कोई दूसरी तारीख देखें।"
+    : "Please check another date.";
+}
 
     availability.append(status, note);
 
     const button = document.createElement("button");
     button.className = "btn btn-primary";
     button.disabled = true;
-    button.textContent = "Appointment booking coming soon";
-
+    button.textContent = currentLanguage === "hi"
+  ? "अपॉइंटमेंट बुकिंग जल्द उपलब्ध होगी"
+  : "Appointment booking coming soon";
     card.append(top, availability, button);
     doctorGrid.appendChild(card);
   });
