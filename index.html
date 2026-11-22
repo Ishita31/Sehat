@@ -1092,7 +1092,19 @@ async function loadDoctors() {
 
   renderDoctors();
 }
+function formatTime(time) {
+  if (!time) return "";
 
+  const [hours, minutes] = time.split(":");
+  const date = new Date();
+  date.setHours(Number(hours), Number(minutes), 0, 0);
+
+  return date.toLocaleTimeString("en-IN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  });
+}
    
 function renderDoctors() {
   doctorGrid.innerHTML = "";
@@ -1165,12 +1177,8 @@ if (summary) {
   availability.classList.add("is-available");
   status.textContent = currentLanguage === "hi" ? "उपलब्ध" : "Available";
 
-  const start = schedule.consultation_start
-    ? schedule.consultation_start.substring(0, 5)
-    : "";
-  const end = schedule.consultation_end
-    ? schedule.consultation_end.substring(0, 5)
-    : "";
+ const start = formatTime(schedule.consultation_start);
+const end = formatTime(schedule.consultation_end);
 
   note.textContent = currentLanguage === "hi"
     ? "परामर्श का समय: " + start + " – " + end
