@@ -1095,15 +1095,24 @@ async function loadDoctors() {
 function formatTime(time) {
   if (!time) return "";
 
-  const [hours, minutes] = time.split(":");
-  const date = new Date();
-  date.setHours(Number(hours), Number(minutes), 0, 0);
+  const [hours, minutes] = time.split(":").map(Number);
 
-  return date.toLocaleTimeString("en-IN", {
+  const period =
+    hours >= 5 && hours < 12 ? "Morning" :
+    hours >= 12 && hours < 17 ? "Afternoon" :
+    hours >= 17 && hours < 21 ? "Evening" :
+    "Night";
+
+  const date = new Date();
+  date.setHours(hours, minutes, 0, 0);
+
+  const formattedTime = date.toLocaleTimeString("en-IN", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true
   });
+
+  return formattedTime + " (" + period + ")";
 }
    
 function renderDoctors() {
