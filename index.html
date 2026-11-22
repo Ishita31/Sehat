@@ -1020,10 +1020,64 @@
     </div>
 
     <div class="doctor-card" style="margin-top:20px;">
-      <h3>Hospital Profile</h3>
-      <p id="adminHospitalLocation">Loading location...</p>
-      <p id="adminGpsStatus">Checking attendance location settings...</p>
-      <p id="adminAttendanceRadius"></p>
+      <div class="doctor-card" style="margin-top:20px;">
+  <h3>Hospital Profile</h3>
+  <p>Manage your hospital information and receptionist attendance location.</p>
+
+  <form id="hospitalProfileForm">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
+      <div>
+        <label for="profileHospitalName">Hospital Name</label>
+        <input id="profileHospitalName" type="text" required>
+      </div>
+
+      <div>
+        <label for="profileHospitalPhone">Contact Phone</label>
+        <input id="profileHospitalPhone" type="tel">
+      </div>
+
+      <div>
+        <label for="profileHospitalAddress">Address</label>
+        <input id="profileHospitalAddress" type="text">
+      </div>
+
+      <div>
+        <label for="profileHospitalDistrict">District</label>
+        <input id="profileHospitalDistrict" type="text">
+      </div>
+
+      <div>
+        <label for="profileHospitalState">State</label>
+        <input id="profileHospitalState" type="text">
+      </div>
+    </div>
+
+    <h4 style="margin-top:25px;">Attendance GPS Settings</h4>
+    <p>Set the hospital's location so receptionists can mark attendance within the allowed distance.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
+      <div>
+        <label for="profileLatitude">Hospital Latitude</label>
+        <input id="profileLatitude" type="number" step="any" min="-90" max="90" placeholder="e.g. 26.2183">
+      </div>
+
+      <div>
+        <label for="profileLongitude">Hospital Longitude</label>
+        <input id="profileLongitude" type="number" step="any" min="-180" max="180" placeholder="e.g. 78.1828">
+      </div>
+
+      <div>
+        <label for="profileAttendanceRadius">Attendance Radius (metres)</label>
+        <input id="profileAttendanceRadius" type="number" min="25" max="1000" value="100" required>
+      </div>
+    </div>
+
+    <p id="hospitalProfileMessage" style="margin-top:15px;"></p>
+
+    <button type="submit" class="btn btn-primary" style="margin-top:15px;">
+      Save Hospital Profile
+    </button>
+  </form>
     </div>
 
     <p id="adminDashboardMessage" style="margin-top:20px;"></p>
