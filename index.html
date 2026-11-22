@@ -1097,11 +1097,17 @@ function formatTime(time) {
 
   const [hours, minutes] = time.split(":").map(Number);
 
-  const period =
-    hours >= 5 && hours < 12 ? "Morning" :
-    hours >= 12 && hours < 17 ? "Afternoon" :
-    hours >= 17 && hours < 21 ? "Evening" :
-    "Night";
+  let period;
+
+  if (hours >= 5 && hours < 12) {
+    period = currentLanguage === "hi" ? "सुबह" : "Morning";
+  } else if (hours >= 12 && hours < 17) {
+    period = currentLanguage === "hi" ? "दोपहर" : "Afternoon";
+  } else if (hours >= 17 && hours < 21) {
+    period = currentLanguage === "hi" ? "शाम" : "Evening";
+  } else {
+    period = currentLanguage === "hi" ? "रात" : "Night";
+  }
 
   const date = new Date();
   date.setHours(hours, minutes, 0, 0);
