@@ -983,6 +983,52 @@
     </div>
   </div>
 </section>
+     
+<section id="hospitalAdminDashboard" style="display:none; padding:40px 20px;">
+  <div class="container">
+    <a href="#" id="adminLogout" style="color:#762D3B;text-decoration:none;font-weight:600;">
+      ← Logout
+    </a>
+
+    <div style="margin:30px 0 20px;">
+      <p style="color:#762D3B;font-weight:600;letter-spacing:2px;">HOSPITAL ADMIN</p>
+      <h2 id="adminHospitalName">Hospital Dashboard</h2>
+      <p id="adminHospitalAddress">Loading hospital details...</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin:25px 0;">
+      <div class="doctor-card">
+        <p>Total Doctors</p>
+        <h2 id="adminDoctorCount">—</h2>
+      </div>
+      <div class="doctor-card">
+        <p>Receptionists</p>
+        <h2 id="adminReceptionistCount">—</h2>
+      </div>
+      <div class="doctor-card">
+        <p>Total Appointments</p>
+        <h2 id="adminAppointmentCount">—</h2>
+      </div>
+      <div class="doctor-card">
+        <p>Pending Appointments</p>
+        <h2 id="adminPendingCount">—</h2>
+      </div>
+      <div class="doctor-card">
+        <p>Today's Appointments</p>
+        <h2 id="adminTodayCount">—</h2>
+      </div>
+    </div>
+
+    <div class="doctor-card" style="margin-top:20px;">
+      <h3>Hospital Profile</h3>
+      <p id="adminHospitalLocation">Loading location...</p>
+      <p id="adminGpsStatus">Checking attendance location settings...</p>
+      <p id="adminAttendanceRadius"></p>
+    </div>
+
+    <p id="adminDashboardMessage" style="margin-top:20px;"></p>
+  </div>
+</section>
 
   </main>
 
