@@ -1326,6 +1326,7 @@ backToHomeLink.addEventListener("click", function(event) {
   const message = document.getElementById("staffLoginMessage");
   const email = document.getElementById("staffEmail").value.trim();
   const password = document.getElementById("staffPassword").value;
+  const staffLoginSection = document.getElementById("staffLogin");
 
   message.style.display = "block";
   message.textContent = "Checking login...";
@@ -1341,24 +1342,22 @@ backToHomeLink.addEventListener("click", function(event) {
     return;
   }
 
-  const { data: staffRows, error: staffError } = await db
-  .rpc("get_my_staff_profile");
+  const { data: staffRows, error: staffError } =
+    await db.rpc("get_my_staff_profile");
 
-const staff = staffRows && staffRows.length > 0
-  ? staffRows[0]
-  : null;
+  const staff = staffRows && staffRows.length > 0
+    ? staffRows[0]
+    : null;
 
   if (staffError || !staff || !staff.is_active) {
     await db.auth.signOut();
-    message.textContent = "Login succeeded, but an active Sehat staff profile could not be verified.";
+    message.textContent =
+      "Login succeeded, but an active Sehat staff profile could not be verified.";
     console.error("Staff verification error:", staffError);
     return;
   }
 
-  message.textContent =
-    "Welcome, " + staff.full_name + "! Login successful. Role: " + staff.role;
-
-  // Show the doctor workspace only for doctor accounts
+  // DOCTOR WORKSPACE
   if (staff.role === "doctor") {
     const workspace = document.getElementById("doctorAvailability");
     const hospitalDropdown = document.getElementById("availabilityHospital");
@@ -1374,7 +1373,6 @@ const staff = staffRows && staffRows.length > 0
       console.error("Doctor assignment error:", assignmentError);
     } else {
       window.sehatDoctorAssignments = assignments;
-
       hospitalDropdown.innerHTML = "";
 
       assignments.forEach(assignment => {
@@ -1383,18 +1381,97 @@ const staff = staffRows && staffRows.length > 0
         option.textContent = assignment.hospital_name;
         hospitalDropdown.appendChild(option);
       });
-document.querySelectorAll("main > section").forEach(section => {
-  section.style.display = "none";
-});
 
-staffLoginSection.style.display = "none";
+      document.querySelectorAll("main > section").forEach(section => {
+        section.style.display = "none";
+      });
+
+      staffLoginSection.style.display = "none";
       workspace.style.display = "block";
+
       message.textContent =
         "Welcome, " + staff.full_name + "! Your doctor workspace is ready.";
 
       workspace.scrollIntoView({ behavior: "smooth" });
     }
+
+  // HOSPITAL ADMIN DASHBOARD
+  } else if (staff.role === "hospital_admin") {
+    message.textContent = "Loading your hospital dashboard...";
+
+    const { data: overviewRows, error: overviewError } =
+      await db.rpc("get_hospital_admin_overview");
+
+    if (overviewError || !overviewRows || overviewRows.length === 0) {
+      message.textContent = "Unable to load your hospital dashboard.";
+      console.error("Hospital dashboard error:", overviewError);
+    } else {
+      const hospital = overviewRows[0];
+
+      document.querySelectorAll("main > section").forEach(section => {
+        section.style.display = "none";
+      });
+
+      staffLoginSection.style.display = "none";
+
+      const dashboard =
+        document.getElementById("hospitalAdminDashboard");
+
+      dashboard.style.display = "block";
+
+      document.getElementById("adminHospitalName").textContent =
+        hospital.hospital_name || "Hospital Dashboard";
+
+      const addressParts = [
+        hospital.address,
+        hospital.district,
+        hospital.state
+      ].filter(Boolean);
+
+      document.getElementById("adminHospitalAddress").textContent =
+        addressParts.join(", ") || "Hospital address not added";
+
+      document.getElementById("adminDoctorCount").textContent =
+        hospital.total_doctors;
+
+      document.getElementById("adminReceptionistCount").textContent =
+        hospital.total_receptionists;
+
+      document.getElementById("adminAppointmentCount").textContent =
+        hospital.total_appointments;
+
+      document.getElementById("adminPendingCount").textContent =
+        hospital.pending_appointments;
+
+      document.getElementById("adminTodayCount").textContent =
+        hospital.todays_appointments;
+
+      document.getElementById("adminHospitalLocation").textContent =
+        hospital.latitude != null && hospital.longitude != null
+          ? "GPS coordinates: " + hospital.latitude + ", " + hospital.longitude
+          : "GPS coordinates not configured yet.";
+
+      document.getElementById("adminGpsStatus").textContent =
+        hospital.latitude != null && hospital.longitude != null
+          ? "Attendance location is configured."
+          : "Attendance location needs to be configured.";
+
+      document.getElementById("adminAttendanceRadius").textContent =
+        "Attendance radius: " + hospital.attendance_radius_m + " metres";
+
+      document.getElementById("adminDashboardMessage").textContent =
+        "Welcome, " + staff.full_name + ". Your hospital dashboard is ready.";
+
+      dashboard.scrollIntoView({ behavior: "smooth" });
+    }
+
+  } else {
+    message.textContent =
+      "Login successful, but this role's dashboard is not available yet.";
   }
+
+  document.getElementById("staffPassword").value = "";
+});
 
   document.getElementById("staffPassword").value = "";
 });
